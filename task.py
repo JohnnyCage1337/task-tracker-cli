@@ -11,11 +11,13 @@ class TaskStatus(Enum):
 
 
 class Task:
+    date_format = "%d.%m.%y %H:%M:%S"
+
     def __init__(
         self,
         id: int,
         desc: str,
-        status: TaskStatus,
+        status: TaskStatus = TaskStatus.TODO,
         created_at: str = None,
         updated_at: str = None,
     ):
@@ -25,14 +27,13 @@ class Task:
 
         # odtwarzanie stanu
         now = d.datetime.now()
-        date_format = "%d.%m.%y %H:%M:%S"
         if created_at:
-            self._created_at = d.datetime.strptime(created_at, date_format)
+            self._created_at = d.datetime.strptime(created_at, Task.date_format)
         else:
             self._created_at = now
 
         if updated_at:
-            self._updated_at = d.datetime.strptime(updated_at, date_format)
+            self._updated_at = d.datetime.strptime(updated_at, Task.date_format)
         else:
             self._updated_at = now
 
@@ -67,6 +68,27 @@ class Task:
     @property
     def updated_at(self):
         return self._updated_at
+
+    @classmethod
+    def from_dict(cls, data):
+        """Create Task obj from JSON data"""
+        return cls(
+            id=data["id"],
+            desc=data["description"],
+            status=TaskStatus(data["status"]),
+            created_at=data["createdAt"],
+            updated_at=data["updatedAt"],
+        )
+
+    def to_dict(self):
+        """Task to dict for JSON"""
+        return {
+            "id": self._id,
+            "description": self._desc,
+            "status": self._status.value,
+            "createdAt": self._created_at.strftime(Task.date_format),
+            "updatedAt": self._updated_at.strftime(Task.date_format),
+        }
 
     def _update_timestamp(self):
         """A private method updating date of modification(_updated_at)"""
