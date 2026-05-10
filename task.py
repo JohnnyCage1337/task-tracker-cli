@@ -11,6 +11,8 @@ class TaskStatus(Enum):
 
 
 class Task:
+    """Represents a single task in the system with metadata and status tracking."""
+
     date_format = "%d.%m.%y %H:%M:%S"
 
     def __init__(
@@ -21,6 +23,17 @@ class Task:
         created_at: str = None,
         updated_at: str = None,
     ):
+        """
+        Initialize a new Task instance.
+
+        Args:
+            id (int): Unique identifier for the task.
+            desc (str): Description of the task.
+            status (TaskStatus): Current status of the task. Defaults to TODO.
+            created_at (str, optional): Creation timestamp
+            updated_at (str, optional): Last update timestamp
+
+        """
         self._id = id
         self._desc = desc
         self._status = status
@@ -71,7 +84,7 @@ class Task:
 
     @classmethod
     def from_dict(cls, data):
-        """Create Task obj from JSON data"""
+        """Create a Task instance from a dictionary (usually from JSON)."""
         return cls(
             id=data["id"],
             desc=data["description"],
@@ -81,7 +94,7 @@ class Task:
         )
 
     def to_dict(self):
-        """Task to dict for JSON"""
+        """Convert the Task instance into a dictionary for JSON serialization."""
         return {
             "id": self._id,
             "description": self._desc,
