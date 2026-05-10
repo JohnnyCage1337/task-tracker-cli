@@ -10,11 +10,11 @@ DATABASE_PATH = BASE_DIR / "task.json"
 class TaskManager:
     def __init__(self, filename=None):
         self._tasks: dict[int, Task] = {}
-        self._database_path = Path(filename) if filename else DATABASE_PATH
+        self.database_path = Path(filename) if filename else DATABASE_PATH
 
-        if not DATABASE_PATH.exists():
+        if not self.database_path.exists():
             # create file
-            with open(DATABASE_PATH, "w") as json_file:
+            with open(self.database_path, "w") as json_file:
                 json.dump([], json_file)
         else:
             self._load_from_file()
@@ -47,6 +47,13 @@ class TaskManager:
             task.status = TaskStatus(new_status)
         self._save_to_file()
 
+    def get_task(self, id: int) -> Task:
+        """Return Task obj with given id or raise KeyError"""
+        try:
+            return self._tasks[id]
+        except KeyError:
+            raise KeyError(f"Task with ID {id} does not exist")
+
     def delete_task(self, id: int):
         if id not in self._tasks:
             raise KeyError(f"Task with ID: {id} does not exist and cannot be deleted")
@@ -55,7 +62,7 @@ class TaskManager:
         self._save_to_file()
 
     def _load_from_file(self):
-        with open(DATABASE_PATH, "r") as json_file:
+        with open(self.database_path, "r") as json_file:
             data = json.load(json_file)
             for item in data:
                 task = Task.from_dict(item)
@@ -63,15 +70,12 @@ class TaskManager:
 
     def _save_to_file(self):
         tasks_to_dict = [task.to_dict() for task in self._tasks.values()]
-        with open(DATABASE_PATH, "w") as jsonfile:
-            print(self._tasks)
+        with open(self.database_path, "w") as jsonfile:
             json.dump(tasks_to_dict, jsonfile, indent=4)
 
     def get_tasks_by_status(self, status: TaskStatus = TaskStatus.TODO):
-        return [task for task in self._tasks if task.status == status]
+        return [task for task in self._tasks.values() if task.status == status]
 
 
 if __name__ == "__main__":
-    tm = TaskManager()
-    tm.add_task("dupa")
-    tm.upda
+    pass
