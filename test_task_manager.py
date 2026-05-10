@@ -28,16 +28,12 @@ class TestTaskManager(unittest.TestCase):
         self.assertEqual(new_tm.get_task(1).desc, "Task 1")
 
     def test_id_sequence(self):
-        """Verify task ID generation logic(Currently implemented as max(keys + 1))."""
+        """Verify task ID generation logic(always increase by 1, never reapeat)."""
         task1_id = self.tm.add_task("Task 1")
+        self.tm.delete_task(task1_id)
+
         task2_id = self.tm.add_task("Task 2")
-        task3_id = self.tm.add_task("Task 2")
-
-        self.tm.delete_task(task2_id)
-
-        task4_id = self.tm.add_task("Task 4")
-        # max+1 logic should be 4
-        self.assertEqual(task4_id, 4)
+        self.assertEqual(task2_id, 2)
 
     def test_if_update_at_change(self):
         """Ensure the 'updated_at timestamp is refreshed upon task modification."""
