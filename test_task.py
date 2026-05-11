@@ -107,8 +107,11 @@ class TestTask(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    import sys
+
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTask)
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
 
     print(f"Tests run: {result.testsRun}")
+    sys.exit(not result.wasSuccessful())
