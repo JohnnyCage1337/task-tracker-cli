@@ -39,7 +39,7 @@ class Task:
         self._status = status
 
         # odtwarzanie stanu
-        now = d.datetime.now()
+        now = d.datetime.now().replace(microsecond=0)
         if created_at:
             self._created_at = d.datetime.strptime(created_at, Task.date_format)
         else:
@@ -49,6 +49,27 @@ class Task:
             self._updated_at = d.datetime.strptime(updated_at, Task.date_format)
         else:
             self._updated_at = now
+
+    def __eq__(self, other):
+        if not isinstance(other, Task):
+            return NotImplemented
+
+        return (
+            self._id == other._id
+            and self._desc == other._desc
+            and self._status == other._status
+            and self._created_at == other._created_at
+            and self._updated_at == other._updated_at
+        )
+
+    def __repr__(self):
+        return (
+            f"Task(id={self._id}, desc='{self._desc}', status={self._status.value})"
+            f"(created_at={self._created_at}), (updated_at={self._updated_at})"
+        )
+
+    def __str__(self):
+        return f"[{self._id}] {self.desc} ({self.status.value})"
 
     @property
     def id(self):
@@ -105,4 +126,4 @@ class Task:
 
     def _update_timestamp(self):
         """A private method updating date of modification(_updated_at)"""
-        self._updated_at = d.datetime.now()
+        self._updated_at = d.datetime.now().replace(microsecond=0)

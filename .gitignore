@@ -1,0 +1,11 @@
+# Python śmieci
+__pycache__/
+*.py[cod]
+
+# Lokalne dane (nie chcemy ich w Gicie, każdy ma swoje)
+task.json
+test_tasks.json
+
+# IDE
+.vscode/
+.idea/
