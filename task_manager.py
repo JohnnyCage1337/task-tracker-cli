@@ -23,8 +23,7 @@ class TaskManager:
 
         if not self.database_path.exists():
             # create file
-            with open(self.database_path, "w") as json_file:
-                json.dump([], json_file)
+            self._save_to_file()
         else:
             self._load_from_file()
 
@@ -98,7 +97,9 @@ class TaskManager:
         with open(self.database_path, "w") as jsonfile:
             json.dump(output, jsonfile, indent=4)
 
-    def get_tasks_by_status(self, status: TaskStatus = TaskStatus.TODO):
+    def get_tasks_by_status(self, status: TaskStatus = None):
+        if not status:
+            return [t for t in self._tasks.values()]
         """Return a list of tasks filtered by their current status."""
         return [task for task in self._tasks.values() if task.status == status]
 
