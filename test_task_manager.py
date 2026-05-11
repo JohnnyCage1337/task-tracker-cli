@@ -37,9 +37,11 @@ class TestTaskManager(unittest.TestCase):
 
     def test_if_update_at_change(self):
         """Ensure the 'updated_at timestamp is refreshed upon task modification."""
+        import time
+
         task_id = self.tm.add_task("Task 1")
         old_date = self.tm.get_task(task_id).updated_at
-
+        time.sleep(1)
         self.tm.update_task(task_id, new_desc="new_desc")
         new_date = self.tm.get_task(task_id).updated_at
 
@@ -116,5 +118,6 @@ if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTaskManager)
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
+
     print(f"Tests run: {result.testsRun}")
     sys.exit(not result.wasSuccessful())
