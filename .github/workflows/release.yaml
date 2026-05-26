@@ -33,7 +33,7 @@ jobs:
     - name: Run Unit Tests
       run: |
         python test_task.py
-        python test_task.manager.py
+        python test_task_manager.py
 
     - name: Install PyInstaller
       run: |
