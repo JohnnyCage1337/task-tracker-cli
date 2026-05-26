@@ -1,10 +1,10 @@
 import json
-from pathlib import Path
+import os
 
 from task import Task, TaskStatus
 
-BASE_DIR = Path(__file__).resolve().parent
-DATABASE_PATH = BASE_DIR / "task.json"
+BASE_DIR = os.getcwd()
+DATABASE_PATH = os.path.join(BASE_DIR, "tasks.json")
 
 
 class TaskManager:
@@ -18,10 +18,10 @@ class TaskManager:
             filename (str, optional): Custom path to the JSON database file.
         """
         self._tasks: dict[int, Task] = {}
-        self.database_path = Path(filename) if filename else DATABASE_PATH
+        self.database_path = filename if filename else DATABASE_PATH
         self._last_id = 0
 
-        if not self.database_path.exists():
+        if not os.path.exists(self.database_path):
             # create file
             self._save_to_file()
         else:
